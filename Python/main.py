@@ -1,35 +1,45 @@
 import pygame
 from sys import exit
 import random
-import pyautogui
 
 from words import words
 
-WIDTH , HEIGHT =  1300 , 650
+pygame.init()
+
+WIDTH , HEIGHT =  1200 , 600
 FPS = 60
 
 # Letter that should be typed
 letter = ""
+
+# list of words
+string = ""
+
+# list of the pygame font
+lst = []
 
 speed = 0
 all_letters = 0
 right_letters = 0
 wrong_letters = 0
 
-
 def get_words():
-    word_lst = []
-    lst = []
+    string = ""
     for _ in range(10):
         word = random.choice(words)
-        word_lst.append(word)
-        text = pygame.font.Font(None , 30)
-        text = text.render("word" , True , "white")
-        lst.append(text)
-    return lst , word_lst
+        string += word + " "
+    string_text = pygame.font.Font(None , 40)
+    string_text = string_text.render(string , True , "white")
+    string_text_rect = string_text.get_rect(center = (WIDTH / 2 , HEIGHT / 2))
+    
+    return string[:-1] , [string_text , string_text_rect]
+
+string , string_rect = get_words()
+
+def draw():
+    screen.blit(string_rect[0] , string_rect[1])
 
 
-pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.RESIZABLE)
 screen.fill((17 , 17 , 17))
 clock =  pygame.time.Clock()
@@ -49,6 +59,6 @@ while True:
                 exit()
     
     screen.blit(main_surface , main_surface_rect)
-    
+    draw()
     pygame.display.update()
     clock.tick(FPS)
