@@ -5,16 +5,31 @@ import pyautogui
 
 from words import words
 
-for _ in range(10):
-    print(random.choice(words))
-
-size = pyautogui.size()
-WIDTH , HEIGHT =  size
+WIDTH , HEIGHT =  1200 , 600
 FPS = 60
+
+speed = 0
+all_letters = 0
+right_letters = 0
+wrong_letters = 0
+
+
+def get_words():
+    string = ""
+    lst = []
+    for _ in range(10):
+        word = random.choice(words)
+        string += word + " "
+        text = pygame.font.Font(None , 30)
+        text = text.render("word" , True , "white")
+        lst.append(text)
+    return lst , string[:-1]
+
 
 pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.RESIZABLE)
 clock =  pygame.time.Clock()
+
 
 
 while True:
@@ -27,7 +42,7 @@ while True:
                 pygame.quit()
                 exit()
     
-                
+
     
     pygame.display.update()
     clock.tick(FPS)
