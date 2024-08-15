@@ -29,9 +29,6 @@ wrong_letters = 0
 
 def get_words():
     string = ""
-    # for _ in range(10):
-    #     word = random.choice(words)
-    #     string += word + " "
     while len(string) < 50:
         word = random.choice(words)
         string += word + " "
@@ -43,11 +40,12 @@ def get_words():
 
 string , string_rect = get_words()
 
-def draw():
+typed_font = pygame.font.Font(None , 35)
+
+def draw(typed_font):
     screen.blit(main_surface , main_surface_rect)
     screen.blit(string_rect[0] , string_rect[1])
     
-    typed_font = pygame.font.Font(None , 35)
     typed_font = typed_font.render(typed_string , True, "green")
     typed_font_rect = typed_font.get_rect(topleft = (250 , HEIGHT / 2))
     
@@ -75,10 +73,10 @@ while True:
             elif event.key == pygame.K_BACKSPACE:
                 typed_string = typed_string[:-2] + "|"
             else:
-                typed_string = typed_string[:-1]+ event.unicode + "|"
+                typed_string = typed_string[:-1] + event.unicode + "|"
+    print(pygame.font.Font.size())
     print(typed_string)
     
-    draw()
+    draw(typed_font)
     pygame.display.update()
     clock.tick(FPS)
-
