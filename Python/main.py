@@ -9,7 +9,7 @@ pygame.init()
 WIDTH , HEIGHT =  1200 , 600
 FPS = 60
 
-typed_string = "|"
+typed_string = ""
 
 # list of the pygame font
 first_line_lst = []
@@ -34,6 +34,7 @@ def get_words():
     return string[:-1] , [string_text , string_text_rect]
 
 string , string_rect = get_words()
+letter = string[0]
 
 typed_font = pygame.font.Font(None , 35)
 
@@ -69,21 +70,27 @@ while True:
                 pygame.quit()
                 exit()
             elif event.key == pygame.K_BACKSPACE:
-                typed_string = typed_string[:-2] + "|"
-            else:
-                if string[len(typed_string) - 1] == event.unicode:
-                    typed_string = typed_string[:-1] + event.unicode + "|"
+                if mistakes:
+                    mistakes = mistakes[:-1]
                 else:
-                    typed_string = typed_string[:-1] + "|"
+                    typed_string = typed_string[:-1]
+            else:
+                if letter == event.unicode:
+                    typed_string += event.unicode
+                    letter = string[len(typed_string)]
+                else:
+                    # typed_string += event.unicode
                     mis = pygame.font.Font(None , 35)
-                    mis = mis.render(string[len(typed_string) - 2] , True , "red")
+                    mis = mis.render(letter , True , "red")
                     if not mistakes:
-                        distance = pygame.font.Font.size(typed_font , typed_string)[0] - 14
+                        distance = pygame.font.Font.size(typed_font , string[:len(typed_string)] )[0]
                     else:
-                        distance = pygame.font.Font.size(typed_font , typed_string)[0] - 14 
+                        distance = pygame.font.Font.size(typed_font , string[:len(typed_string)] )[0]
                     mis_rect = mis.get_rect(topleft = (250 + distance , HEIGHT / 2))
-                    mistakes.append([mis , mis_rect , len(typed_string) - 1])
+                    mistakes.append([mis , mis_rect , len(typed_string)])
 
+    
+    print(pygame.font.Font.size(typed_font , typed_string)[0])
     
     draw(typed_font)
     pygame.display.update()
