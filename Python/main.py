@@ -9,18 +9,13 @@ pygame.init()
 WIDTH , HEIGHT =  1200 , 600
 FPS = 60
 
-# Letter that should be typed
-letter = ""
-
-# list of words
-first_line_string = ""
-second_line_string = ""
-
 typed_string = "|"
 
 # list of the pygame font
 first_line_lst = []
 
+# mistakes 
+mistakes = []
 
 speed = 0
 all_letters = 0
@@ -50,6 +45,9 @@ def draw(typed_font):
     typed_font_rect = typed_font.get_rect(topleft = (250 , HEIGHT / 2))
     
     screen.blit(typed_font , typed_font_rect)
+    
+    for mis in mistakes:
+        screen.blit(mis[0] , mis[1])
 
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.RESIZABLE)
@@ -73,9 +71,19 @@ while True:
             elif event.key == pygame.K_BACKSPACE:
                 typed_string = typed_string[:-2] + "|"
             else:
-                typed_string = typed_string[:-1] + event.unicode + "|"
-    print(pygame.font.Font.size())
-    print(typed_string)
+                if string[len(typed_string) - 1] == event.unicode:
+                    typed_string = typed_string[:-1] + event.unicode + "|"
+                else:
+                    typed_string = typed_string[:-1] + "|"
+                    mis = pygame.font.Font(None , 35)
+                    mis = mis.render(string[len(typed_string) - 2] , True , "red")
+                    if not mistakes:
+                        distance = pygame.font.Font.size(typed_font , typed_string)[0] - 14
+                    else:
+                        distance = pygame.font.Font.size(typed_font , typed_string)[0] - 14 
+                    mis_rect = mis.get_rect(topleft = (250 + distance , HEIGHT / 2))
+                    mistakes.append([mis , mis_rect , len(typed_string) - 1])
+
     
     draw(typed_font)
     pygame.display.update()
