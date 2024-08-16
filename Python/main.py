@@ -31,7 +31,7 @@ def get_words():
     string_text = string_text.render(string , True , "white")
     string_text_rect = string_text.get_rect(topleft = (250 , HEIGHT / 2))
     
-    return string[:-1] , [string_text , string_text_rect]
+    return string, [string_text , string_text_rect]
 
 string , string_rect = get_words()
 letter = string[0]
@@ -79,18 +79,16 @@ while True:
                     typed_string += event.unicode
                     letter = string[len(typed_string)]
                 else:
-                    # typed_string += event.unicode
-                    mis = pygame.font.Font(None , 35)
-                    mis = mis.render(letter , True , "red")
-                    if not mistakes:
-                        distance = pygame.font.Font.size(typed_font , string[:len(typed_string)] )[0]
-                    else:
-                        distance = pygame.font.Font.size(typed_font , string[:len(typed_string)] )[0]
+                    mis1 = pygame.font.Font(None , 35)
+                    mis = mis1.render(letter , True , "red")
+                    distance = pygame.font.Font.size(typed_font , string[:len(typed_string)])[0]
+                    
+                    for i in mistakes:
+                        distance += pygame.font.Font.size(i[3] , string[len(typed_string) + len(mistakes) + 1])[0]
+                    
                     mis_rect = mis.get_rect(topleft = (250 + distance , HEIGHT / 2))
-                    mistakes.append([mis , mis_rect , len(typed_string)])
+                    mistakes.append([mis , mis_rect , len(typed_string) , mis1])
 
-    
-    print(pygame.font.Font.size(typed_font , typed_string)[0])
     
     draw(typed_font)
     pygame.display.update()
