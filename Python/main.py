@@ -1,6 +1,7 @@
 import pygame
 from sys import exit
 import random
+import time
 
 from words import words
 
@@ -11,8 +12,10 @@ FPS = 60
 
 typed_string = ""
 
-# list of the pygame font
-first_line_lst = []
+finished = False
+
+start_time = 0
+end_time = 0
 
 # mistakes 
 mistakes = []
@@ -37,6 +40,11 @@ string , string_rect = get_words()
 letter = string[0]
 
 typed_font = pygame.font.Font(None , 35)
+
+def check_speed():
+    if start_time != 0 and typed_string:
+        start_time = time.time()
+    
 
 def draw(typed_font):
     screen.blit(main_surface , main_surface_rect)
@@ -65,7 +73,7 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
-        if event.type == pygame.KEYDOWN:
+        if event.type == pygame.KEYDOWN and not finished:
             if event.key == pygame.K_ESCAPE:
                 pygame.quit()
                 exit()
@@ -75,21 +83,25 @@ while True:
                 else:
                     typed_string = typed_string[:-1]
             else:
+                all_letters += 1
                 if letter == event.unicode:
+                    right_letters += 1
                     typed_string += event.unicode
                     letter = string[len(typed_string)]
                 else:
+                    wrong_letters += 1
                     mis1 = pygame.font.Font(None , 35)
-                    mis = mis1.render(letter , True , "red")
+                    mis = mis1.render(string[len(typed_string) + len(mistakes)] , True , "red")
                     distance = pygame.font.Font.size(typed_font , string[:len(typed_string)])[0]
                     
                     for i in mistakes:
-                        distance += pygame.font.Font.size(i[3] , string[len(typed_string) + len(mistakes) + 1])[0]
+                        distance += pygame.font.Font.size(i[3] , string[len(typed_string) + len(mistakes)])[0]
                     
                     mis_rect = mis.get_rect(topleft = (250 + distance , HEIGHT / 2))
                     mistakes.append([mis , mis_rect , len(typed_string) , mis1])
-
-    
+                    
+    if typed_string == string[:-1]:
+        finished = True
     draw(typed_font)
     pygame.display.update()
     clock.tick(FPS)
