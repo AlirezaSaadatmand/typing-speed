@@ -61,6 +61,13 @@ def draw(typed_font):
     screen.blit(speed_surface, speed_surface_rect)
     screen.blit(string_rect[0], string_rect[1])
 
+    speed_font = pygame.font.Font(None, 35)
+    speed_font = speed_font.render(str(speed), True, "white")
+    speed_font_rect = speed_font.get_rect(
+        center=(WIDTH / 2 + 200, HEIGHT / 2 + 150))
+
+    screen.blit(speed_font, speed_font_rect)
+
     typed_font = typed_font.render(typed_string, True, "green")
     typed_font_rect = typed_font.get_rect(topleft=(250, HEIGHT / 2))
 
@@ -96,8 +103,10 @@ while True:
             elif event.key == pygame.K_BACKSPACE:
                 if mistakes:
                     mistakes = mistakes[:-1]
-                else:
+                elif typed_string:
                     typed_string = typed_string[:-1]
+                    letter = string[len(typed_string)]
+
             else:
                 all_letters += 1
                 if letter == event.unicode:
@@ -124,13 +133,6 @@ while True:
         finished = True
     draw(typed_font)
     check_speed()
-
-    speed_font = pygame.font.Font(None, 35)
-    speed_font = speed_font.render(str(speed), True, "white")
-    speed_font_rect = speed_font.get_rect(
-        center=(WIDTH / 2 + 200, HEIGHT / 2 + 150))
-
-    screen.blit(speed_font, speed_font_rect)
 
     pygame.display.update()
     clock.tick(FPS)
