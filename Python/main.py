@@ -52,7 +52,7 @@ def check_speed():
 
         speed = round((right_letters / 5) / ((time.time() - start_time) / 60))
 
-        if start_time == 0 and not typed_string:
+        if start_time == 0 and typed_string:
             start_time = time.time()
 
 
