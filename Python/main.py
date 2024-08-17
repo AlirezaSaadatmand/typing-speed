@@ -121,13 +121,13 @@ while True:
                     distance = pygame.font.Font.size(
                         typed_font, string[:len(typed_string)])[0]
 
-                    for i in mistakes:
+                    for i in range(len(mistakes)):
                         distance += pygame.font.Font.size(
-                            i[3], string[len(typed_string) + len(mistakes)])[0]
+                            mistakes[i][3], string[len(typed_string) + i])[0]
 
                     mis_rect = mis.get_rect(
                         topleft=(250 + distance, HEIGHT / 2))
-                    mistakes.append([mis, mis_rect, len(typed_string), mis1])
+                    mistakes.append([mis, mis_rect, event.unicode, mis1])
 
     if typed_string == string[:-1]:
         finished = True
