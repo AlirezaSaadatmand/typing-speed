@@ -10,20 +10,29 @@ pygame.init()
 WIDTH, HEIGHT = 1200, 600
 FPS = 60
 
+# What is typed py user
 typed_string = ""
 
+# check finished or not
 finished = False
 
+# Times
 start_time = 0
 end_time = 0
 
 # mistakes
 mistakes = []
 
+# Speed
 speed = 0
+
+# State of typed letters
 all_letters = 0
 right_letters = 0
 wrong_letters = 0
+
+# Accuracy
+accuracy = 0
 
 
 def get_words():
@@ -135,7 +144,7 @@ while True:
                     mis_rect = mis.get_rect(
                         topleft=(250 + distance, HEIGHT / 2 - 50))
                     mistakes.append([mis, mis_rect, event.unicode, mis1])
-                    letter = string[len(typed_string) + len(mistakes)]
+                    # letter = string[len(typed_string) + len(mistakes)]
 
     if typed_string == string[:-1]:
         finished = True
@@ -149,6 +158,13 @@ while True:
             center=(WIDTH / 2 - 375, HEIGHT / 2 + 150)
         )
         screen.blit(big_speed_text, big_speed_text_rect)
+
+        wpm_text = pygame.font.Font(None, 20)
+        wpm_text = wpm_text.render("WPM", True, "white")
+        wpm_text_rect = wpm_text.get_rect(
+            center=(WIDTH / 2 - 325, HEIGHT / 2 + 150))
+        screen.blit(wpm_text, wpm_text_rect)
+
         if not end_time:
             end_time = time.time()
             end_time = round(end_time - start_time)
@@ -156,11 +172,48 @@ while True:
         time_result = pygame.font.Font(None, 25)
         time_result = time_result.render(f"Time : {end_time}", True, "white")
         time_result_rect = time_result.get_rect(
-            center=(WIDTH / 2 - 225, HEIGHT / 2 + 150))
-
+            center=(WIDTH / 2 - 180, HEIGHT / 2 + 125))
         screen.blit(time_result, time_result_rect)
+
+        typed_char = pygame.font.Font(None, 25)
+        typed_char = typed_char.render(
+            f"Typed characters : {all_letters}", True, "white")
+        typed_char_rect = typed_char.get_rect(
+            center=(WIDTH / 2 - 180, HEIGHT / 2 + 175))
+        screen.blit(typed_char, typed_char_rect)
+
+        correct = pygame.font.Font(None, 25)
+        correct = correct.render(
+            f"Correct letters : {right_letters}", True, "white")
+        correct_rect = correct.get_rect(
+            center=(WIDTH / 2 + 55, HEIGHT / 2 + 125))
+        screen.blit(correct, correct_rect)
+
+        incorrect = pygame.font.Font(None, 25)
+        incorrect = incorrect.render(
+            f"Incorrect letters : {wrong_letters}", True, "white")
+        incorrect_rect = incorrect.get_rect(
+            center=(WIDTH / 2 + 55, HEIGHT / 2 + 175))
+        screen.blit(incorrect, incorrect_rect)
+
+        accuracy = round(100 - wrong_letters / right_letters * 100, 1)
+        accuracy = accuracy if accuracy < 100 else 100
+        big_accuracy_text = pygame.font.Font(None, 70)
+        big_accuracy_text = big_accuracy_text.render(
+            str(accuracy), True, "white")
+        big_accuracy_text_rect = big_accuracy_text.get_rect(
+            center=(WIDTH / 2 + 210, HEIGHT / 2 + 150)
+        )
+        screen.blit(big_accuracy_text, big_accuracy_text_rect)
+
+        percent_text = pygame.font.Font(None, 20)
+        percent_text = percent_text.render("%", True, "white")
+        percent_text_rect = percent_text.get_rect(
+            center=(WIDTH / 2 + 275, HEIGHT / 2 + 150))
+        screen.blit(percent_text, percent_text_rect)
+
     else:
-        draw(typed_font)
         check_speed()
+    draw(typed_font)
     pygame.display.update()
     clock.tick(FPS)
